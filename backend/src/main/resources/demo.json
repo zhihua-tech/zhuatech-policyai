@@ -1,0 +1,61 @@
+[
+  {
+    "op": "create",
+    "as": "control",
+    "module": "controls",
+    "data": {
+      "name": "信息安全控制",
+      "keywords": "数据安全,审查",
+      "severity": "HIGH",
+      "owner": "合规负责人"
+    }
+  },
+  {
+    "op": "create",
+    "as": "policy",
+    "module": "policies",
+    "data": {
+      "title": "供应商数据安全政策",
+      "versionName": "V1",
+      "category": "SECURITY",
+      "effectiveDate": "$today",
+      "content": "供应商应完成数据安全审查"
+    }
+  },
+  {
+    "op": "action",
+    "target": "policy",
+    "action": "publish",
+    "data": {},
+    "role": "reviewer"
+  },
+  {
+    "op": "create",
+    "as": "assessment",
+    "module": "assessments",
+    "data": {
+      "policy": "$policy.id",
+      "businessUnit": "采购部",
+      "scope": "供应商准入"
+    }
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "analyze",
+    "data": {}
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "submit",
+    "data": {}
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "approve",
+    "data": {},
+    "role": "reviewer"
+  }
+]
