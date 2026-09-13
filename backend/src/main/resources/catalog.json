@@ -1,0 +1,271 @@
+{
+  "slug": "policyai",
+  "name": "知华制度影响分析",
+  "subtitle": "制度发布、控制项匹配、影响评估与独立复核",
+  "accent": "#445b72",
+  "modules": [
+    {
+      "key": "policies",
+      "label": "制度版本",
+      "description": "维护制度文本与生效版本；发布后内容冻结",
+      "initial": "DRAFT",
+      "editable": true,
+      "creatable": true,
+      "fields": [
+        {
+          "key": "title",
+          "label": "制度标题",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "versionName",
+          "label": "版本号",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "category",
+          "label": "制度类型",
+          "type": "select",
+          "required": true,
+          "ref": null,
+          "options": [
+            "SECURITY",
+            "PROCUREMENT",
+            "FINANCE",
+            "HR"
+          ],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "effectiveDate",
+          "label": "生效日期",
+          "type": "date",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "content",
+          "label": "制度正文",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        }
+      ],
+      "actions": [
+        {
+          "key": "publish",
+          "label": "审核发布",
+          "from": [
+            "DRAFT"
+          ],
+          "to": "PUBLISHED",
+          "role": "REVIEWER",
+          "separate": true,
+          "fields": []
+        },
+        {
+          "key": "retire",
+          "label": "停用版本",
+          "from": [
+            "PUBLISHED"
+          ],
+          "to": "RETIRED",
+          "role": "REVIEWER",
+          "separate": true,
+          "fields": [
+            {
+              "key": "reason",
+              "label": "停用原因",
+              "type": "text",
+              "required": true,
+              "ref": null,
+              "options": [],
+              "min": null,
+              "max": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "controls",
+      "label": "控制项",
+      "description": "维护关键词、风险等级及责任人",
+      "initial": "ACTIVE",
+      "editable": true,
+      "creatable": true,
+      "fields": [
+        {
+          "key": "name",
+          "label": "控制项",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "keywords",
+          "label": "匹配关键词",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "severity",
+          "label": "风险级别",
+          "type": "select",
+          "required": true,
+          "ref": null,
+          "options": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "owner",
+          "label": "控制项责任人",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        }
+      ],
+      "actions": []
+    },
+    {
+      "key": "assessments",
+      "label": "影响评估",
+      "description": "将已发布制度与控制项匹配，形成有来源的建议",
+      "initial": "DRAFT",
+      "editable": true,
+      "creatable": true,
+      "fields": [
+        {
+          "key": "policy",
+          "label": "制度版本",
+          "type": "ref",
+          "required": true,
+          "ref": "policies",
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "businessUnit",
+          "label": "业务部门",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        },
+        {
+          "key": "scope",
+          "label": "评估范围",
+          "type": "text",
+          "required": true,
+          "ref": null,
+          "options": [],
+          "min": null,
+          "max": null
+        }
+      ],
+      "actions": [
+        {
+          "key": "analyze",
+          "label": "执行本地分析",
+          "from": [
+            "DRAFT",
+            "RETURNED"
+          ],
+          "to": "ANALYZED",
+          "role": "OPERATOR",
+          "separate": false,
+          "fields": []
+        },
+        {
+          "key": "submit",
+          "label": "提交复核",
+          "from": [
+            "ANALYZED"
+          ],
+          "to": "REVIEW",
+          "role": "OPERATOR",
+          "separate": false,
+          "fields": []
+        },
+        {
+          "key": "approve",
+          "label": "批准评估",
+          "from": [
+            "REVIEW"
+          ],
+          "to": "APPROVED",
+          "role": "REVIEWER",
+          "separate": true,
+          "fields": []
+        },
+        {
+          "key": "return",
+          "label": "退回评估",
+          "from": [
+            "REVIEW"
+          ],
+          "to": "RETURNED",
+          "role": "REVIEWER",
+          "separate": true,
+          "fields": [
+            {
+              "key": "reason",
+              "label": "退回原因",
+              "type": "text",
+              "required": true,
+              "ref": null,
+              "options": [],
+              "min": null,
+              "max": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "findings",
+      "label": "影响发现",
+      "description": "只追加保存命中依据、风险与处置建议",
+      "initial": "RECORDED",
+      "editable": false,
+      "creatable": false,
+      "fields": [],
+      "actions": []
+    }
+  ]
+}

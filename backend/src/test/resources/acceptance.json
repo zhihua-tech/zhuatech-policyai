@@ -1,0 +1,138 @@
+[
+  {
+    "op": "create",
+    "as": "control",
+    "module": "controls",
+    "data": {
+      "name": "数据安全审查",
+      "keywords": "数据安全,安全审查",
+      "severity": "HIGH",
+      "owner": "合规经理"
+    }
+  },
+  {
+    "op": "create",
+    "as": "policy",
+    "module": "policies",
+    "data": {
+      "title": "供应商数据安全管理",
+      "versionName": "V1",
+      "category": "SECURITY",
+      "effectiveDate": "$today",
+      "content": "供应商必须完成数据安全审查并保留执行证据"
+    }
+  },
+  {
+    "op": "create",
+    "as": "assessment",
+    "module": "assessments",
+    "data": {
+      "policy": "$policy.id",
+      "businessUnit": "采购部",
+      "scope": "供应商准入"
+    }
+  },
+  {
+    "op": "create",
+    "as": "scopeOnlyControl",
+    "module": "controls",
+    "data": {
+      "name": "仅评估范围命中的控制项",
+      "keywords": "供应商准入",
+      "severity": "HIGH",
+      "owner": "合规经理"
+    }
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "analyze",
+    "data": {},
+    "error": 409
+  },
+  {
+    "op": "action",
+    "target": "policy",
+    "action": "publish",
+    "data": {},
+    "role": "reviewer"
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "analyze",
+    "data": {}
+  },
+  {
+    "op": "check",
+    "target": "assessment",
+    "expect": {
+      "state": "ANALYZED",
+      "data.analysisScore": 40,
+      "data.findingCount": 1,
+      "data.method": "LOCAL_RULES_V1"
+    }
+  },
+  {
+    "op": "find",
+    "as": "finding",
+    "module": "findings",
+    "where": {
+      "data.assessment": "$assessment.id"
+    }
+  },
+  {
+    "op": "count",
+    "module": "findings",
+    "count": 1
+  },
+  {
+    "op": "check",
+    "target": "finding",
+    "expect": {
+      "state": "RECORDED",
+      "data.severity": "HIGH",
+      "data.evidence": "数据安全"
+    }
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "submit",
+    "data": {}
+  },
+  {
+    "op": "action",
+    "target": "policy",
+    "action": "retire",
+    "data": {
+      "reason": "版本升级"
+    },
+    "role": "reviewer",
+    "error": 409
+  },
+  {
+    "op": "action",
+    "target": "assessment",
+    "action": "approve",
+    "data": {},
+    "role": "reviewer"
+  },
+  {
+    "op": "action",
+    "target": "policy",
+    "action": "retire",
+    "data": {
+      "reason": "版本升级"
+    },
+    "role": "reviewer"
+  },
+  {
+    "op": "metric",
+    "expect": {
+      "有效制度": 0,
+      "待复核评估": 0,
+    "累计高风险发现": 1
+    }
+  }
+]
