@@ -5,13 +5,29 @@ import java.util.*;
 import static cn.zhuatech.policyai.Model.*;
 import static cn.zhuatech.policyai.Engine.*;
 
-/** 可替换的制度影响分析接口。默认实现完全本地运行，不调用外部模型。 */
+/**
+ * 可替换的制度影响分析接口。默认实现完全本地运行，不调用外部模型。
+ *
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 public interface InsightProvider {
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  record Finding(String controlId,String controlName,String severity,String evidence,String recommendation,int score){}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  List<Finding> analyze(String policyText,String scope,List<Row> controls);
 }
 
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Component class LocalInsightProvider implements InsightProvider {
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public List<Finding> analyze(String policyText,String scope,List<Row> controls){
   String source=policyText.toLowerCase(Locale.ROOT);
   List<Finding> results=new ArrayList<>();

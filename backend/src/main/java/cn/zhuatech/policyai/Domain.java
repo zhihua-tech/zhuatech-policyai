@@ -6,19 +6,37 @@ import java.time.*;
 import static cn.zhuatech.policyai.Model.*;
 import static cn.zhuatech.policyai.Engine.*;
 
+/**
+ * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+ */
 @Component public class Domain {
  private final InsightProvider insight;
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public Domain(InsightProvider insight){this.insight=insight;}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  static String text(Row r,String key){return txt(r.data(),key);}
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public void create(Engine e,User u,String module,Map<String,Object>d){
   if(module.equals("policies"))require(e.all(u,"policies").stream().noneMatch(x->text(x,"title").equalsIgnoreCase(txt(d,"title"))&&text(x,"versionName").equalsIgnoreCase(txt(d,"versionName"))),"相同制度版本已存在");
   if(module.equals("controls"))require(e.all(u,"controls").stream().noneMatch(x->text(x,"name").equalsIgnoreCase(txt(d,"name"))),"控制项名称已存在");
   if(module.equals("assessments"))e.ref(u,d,"policy","policies");
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public void edit(Engine e,User u,Row r,Map<String,Object>d){
   if(r.module().equals("policies"))require(e.all(u,"policies").stream().noneMatch(x->!x.id().equals(r.id())&&text(x,"title").equalsIgnoreCase(txt(d,"title"))&&text(x,"versionName").equalsIgnoreCase(txt(d,"versionName"))),"相同制度版本已存在");
   if(r.module().equals("controls"))require(e.all(u,"controls").stream().noneMatch(x->!x.id().equals(r.id())&&text(x,"name").equalsIgnoreCase(txt(d,"name"))),"控制项名称已存在");
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public String action(Engine e,User u,Row r,String action,Map<String,Object>i,Map<String,Object>d){
   switch(r.module()+"."+action){
    case "policies.publish" -> d.put("publishedAt",Instant.now().toString());
@@ -36,5 +54,8 @@ import static cn.zhuatech.policyai.Engine.*;
   }
   return null;
  }
+ /**
+  * 商业授权或定制开发请微信添加微信号zhuatech或zhuatech2进行咨询。
+  */
  public Map<String,Object> metrics(Engine e,User u){return Map.of("有效制度",e.all(u,"policies").stream().filter(x->x.state().equals("PUBLISHED")).count(),"待复核评估",e.all(u,"assessments").stream().filter(x->x.state().equals("REVIEW")).count(),"累计高风险发现",e.all(u,"findings").stream().filter(x->text(x,"severity").equals("HIGH")).count());}
 }
